@@ -11,11 +11,11 @@ import styles from './styles';
 import { buscaPokemon } from '../../../services/requests/pokemons';
 
 
-export default function PokemonLista({ route, navigation }) {
+export default function PokemonLista({ navigation }) {
     const [allPokemons, setAllPokemons] = useState([])
     const [navegacao, setNavegacao] = useState(false) //sabe se deve navegar
     const [pokemon, setPokemon] = useState('')//qual pokemon navegar
-    console.log(navegacao, pokemon)
+    //console.log(navegacao, pokemon)
 
     useEffect(() => {
         pokemons()
@@ -28,9 +28,10 @@ export default function PokemonLista({ route, navigation }) {
 
     //NAVEGACAO
     if (navegacao === true) {
-        navigation.navigate('InfoPokemon', { quemEEssePokemon: pokemon });
+        navigation.navigate('DetalhesPokemon', { idPokemon: pokemon });
         setNavegacao(false)
         setPokemon('')
+        //console.log("navigation", pokemon)
     } else {
         //console.log("Não vai navegar hoje!")
     }
