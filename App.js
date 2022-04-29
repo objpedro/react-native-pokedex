@@ -1,25 +1,22 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Home from './src/pages/Home';
 import InfoPokemon from './src/pages/InfoPokemon';
-import Teste from './src/pages/teste';
+import PokemonLista from './src/pages/PokeDex/components/pokemonLista';
 
 export default function App() {
 
   const Stack = createNativeStackNavigator();
 
   return (
-    // <Teste />
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home' >
-
+      <Stack.Navigator initialRouteName='PokemonLista' >
         <Stack.Screen
-          name={'Home'}
-          component={Home}
+          name={'PokemonLista'}
+          component={PokemonLista}
           options={{
-            title: 'Pokédex',
+            title: 'PokemonLista',
             headerShown: true//ocultar o header
           }} />
 
@@ -27,7 +24,7 @@ export default function App() {
           name={'InfoPokemon'}
           component={InfoPokemon}
           options={{
-            title: 'Sobre'
+            title: 'InfoPokemon'
           }} />
 
       </Stack.Navigator>
