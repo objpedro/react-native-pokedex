@@ -2,7 +2,7 @@ import api from "../api";
 
 export async function buscaPokemon() {
     try {
-        const resultado = await api.get(`/pokemon/?limit=10`);//requisicao
+        const resultado = await api.get(`/pokemon/?offset=0&limit=20`);//requisicao
         const resultadoMap = resultado.data.results.map(allPokemons => {//tirar do array
             return allPokemons
         })
@@ -13,22 +13,56 @@ export async function buscaPokemon() {
         return {}
     }
 }
-//PEGA OS TIPOS
+
 export async function buscaInfoPokemon(idPokemon) {
     try {
-        const infoResultado = await api.get(`/pokemon/${idPokemon}`);//requisicao
+        const pokemonDetails = await api.get(`/pokemon/${idPokemon}`);
+        const species = await api.get(`/pokemon-species/${idPokemon}`);
+        const evolutionApi = await api.get(species.data.evolution_chain.url);
 
-        //const stats = infoResultado.data.stats
-        const name = infoResultado.data.name
-        const type = infoResultado.data.types.map(typeName => {
-            return typeName.type.name
+        //DETALHES DO POKEMON
+        const name = pokemonDetails.data.name.toUpperCase()
+        const type = pokemonDetails.data.types.map(typeName => {
+            return typeName.type.name.toUpperCase()
         })
-        const abilities = infoResultado.data.abilities.map(abilityName => {
-            return abilityName.ability.name
+        const abilities = pokemonDetails.data.abilities.map(abilityName => {
+            return abilityName.ability.name.toUpperCase()
         })
-        // console.log(`Nome: ${name}. Tipo: ${type}. Habilidades: ${abilities}.`)
-        return {name, type, abilities}
+        const pokemonDescription = species.data.flavor_text_entries.map(description => {
+            if (description.language.name == 'en' && description.version.name == 'x') {
+                return description.flavor_text
+            }
+        })
+        // console.log("Descriçõ: ", pokemonDescription)
 
+        //TRATATIVA EVOLUÇÕES
+        const evolutions = evolutionApi.data.chain
+        const baby = evolutions.species.url.replace('https://pokeapi.co/api/v2/pokemon-species/', '').replace('/', '')
+        const firstEvolution = evolutions.evolves_to.map(first => {
+            return first.species.url.replace('https://pokeapi.co/api/v2/pokemon-species/', '').replace('/', '')
+        })
+        const secondEvolution = evolutions.evolves_to.map(second => {
+            const segundaEvoluçãoMap = second.evolves_to.map(url => {
+                return url.species.url.replace('https://pokeapi.co/api/v2/pokemon-species/', '').replace('/', '')
+            })
+            return segundaEvoluçãoMap[0]
+        })
+
+        //Enviando foto
+        const babyFormImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${baby}.png`
+        const firstFormImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${firstEvolution[0]}.png`
+        const secondFormImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${secondEvolution[0]}.png`
+        let evolutionsFormImage = [babyFormImage]
+
+        //VERIFICA EVOLUÇÕES
+        if (secondEvolution[0] !== undefined) {
+            evolutionsFormImage.push(firstFormImage, secondFormImage)
+        } else if (firstEvolution[0] !== undefined) {
+            evolutionsFormImage.push(firstFormImage)
+        }
+
+        console.log("API OK!")
+        return { name, type, abilities, pokemonDescription, evolutionsFormImage }
     }
     catch (error) {
         console.log(error)

@@ -17,14 +17,13 @@ export default function PokemonLista({ navigation }) {
     const [pokemon, setPokemon] = useState('')//qual pokemon navegar
     //console.log(navegacao, pokemon)
 
-    useEffect(() => {
-        pokemons()
-    }, [])
-
-    async function pokemons() {//chamar pokemons
+    useEffect(async () => {
         const resultado = await buscaPokemon()
         setAllPokemons(resultado)
-    }
+    }, [])
+
+    // async function pokemons() {//chamar pokemons
+    // }
 
     //NAVEGACAO
     if (navegacao === true) {
@@ -53,8 +52,8 @@ export default function PokemonLista({ navigation }) {
                     style={styles.imagePokemon}
                     source={{ uri: pokemonImage }}
                 />
-                <Text
-                    style={styles.namePokemon} >{name}</Text>
+                <Text style={styles.numberPokemon}>{pokemonNumber}</Text>
+                <Text style={styles.namePokemon}>{name.toUpperCase()}</Text>
             </TouchableOpacity>
         )
     }

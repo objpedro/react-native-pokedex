@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
         width: 90,
         height: 90
     },
+    numberPokemon: {
+        position: 'absolute',
+        fontSize: 30,
+        marginLeft: '40%',
+        marginTop: 10,
+    },
     namePokemon: {
         position: 'absolute',
         fontSize: 30,
