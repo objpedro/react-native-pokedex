@@ -4,8 +4,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: "center",
-        justifyContent: 'center'
+        alignItems: 'center',
+    },
+    backgroundLinear: {
+        position: 'absolute',
+        width: '100%',
+        height: "100%"
     },
     pkmConteiner: {
         flexDirection: 'row',
@@ -26,22 +30,34 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginRight: 10,
     },
+    characteristicsContainer: {
+        width: '100%',
+        alignItems: 'center',
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    characteristics: {
+        fontSize: 15
+    },
     typeContainer: {
         flexDirection: 'row',
     },
     type: {
-        marginRight: 5,
-        fontSize: 20
+        fontSize: 15
     },
     abilitiesContainer: {
+        width: '100%',
+        padding: 10,
         flexDirection: 'row',
     },
     abilities: {
         marginRight: 5,
-        fontSize: 20
+        fontSize: 15
     },
-    pokemonDescription:{
+    pokemonDescription: {
         fontSize: 20,
+        textAlign: 'left'
     },
     imageEvolutionContainer: {
         flexDirection: 'row',
@@ -51,8 +67,14 @@ const styles = StyleSheet.create({
         width: 110,
         height: 110,
     },
-    testeAbsolute:{
-        position: 'absolute'
+    arrowEvolutionContainer: {
+        alignItems: "center",
+        flexDirection: 'row'
+    },
+    arrowEvolution: {
+        resizeMode: 'center',
+        width: 30,
+        height: 30,
     }
 })
 

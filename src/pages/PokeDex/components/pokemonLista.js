@@ -6,33 +6,39 @@ import {
     FlatList,
     StatusBar,
     TouchableOpacity,
+    ImageBackground,
 } from 'react-native';
 import styles from './styles';
-import { buscaPokemon } from '../../../services/requests/pokemons';
+import api from '../../../services/api';
+import Footerlist from './Footerlist';
 
 
 export default function PokemonLista({ navigation }) {
     const [allPokemons, setAllPokemons] = useState([])
     const [navegacao, setNavegacao] = useState(false) //sabe se deve navegar
     const [pokemon, setPokemon] = useState('')//qual pokemon navegar
-    //console.log(navegacao, pokemon)
+    const [loading, setLoading] = useState(false);
+    const [offset, setOffset] = useState(0);
 
-    useEffect(async () => {
-        const resultado = await buscaPokemon()
-        setAllPokemons(resultado)
+    useEffect(() => {
+        console.log("App Iniciado")
+        loadApi();
     }, [])
 
-    // async function pokemons() {//chamar pokemons
-    // }
+    async function loadApi() {
+        if (loading) return;
+        setLoading(true)
+        const response = await api.get(`/pokemon/?offset=${offset}&limit=10`)
+        setAllPokemons([...allPokemons, ...response.data.results]);
+        setOffset(offset + 10);
+        setLoading(false)
+    }
 
     //NAVEGACAO
     if (navegacao === true) {
         navigation.navigate('DetalhesPokemon', { idPokemon: pokemon });
         setNavegacao(false)
         setPokemon('')
-        //console.log("navigation", pokemon)
-    } else {
-        //console.log("Não vai navegar hoje!")
     }
 
     function PokemonShow(item) {
@@ -42,9 +48,8 @@ export default function PokemonLista({ navigation }) {
 
         return (
             <TouchableOpacity
-                style={styles.container}
+                style={styles.btn}
                 onPress={() => {
-                    //console.log("Cliquei no Pokemon", pokemonNumber)
                     setNavegacao(true)
                     setPokemon(pokemonNumber)
                 }} >
@@ -52,23 +57,30 @@ export default function PokemonLista({ navigation }) {
                     style={styles.imagePokemon}
                     source={{ uri: pokemonImage }}
                 />
-                <Text style={styles.numberPokemon}>{pokemonNumber}</Text>
-                <Text style={styles.namePokemon}>{name.toUpperCase()}</Text>
+                <View style={styles.identificationContainer}>
+                    <Text style={styles.numberPokemon}>{pokemonNumber}.</Text>
+                    <Text style={styles.namePokemon}> {name.toUpperCase()}</Text>
+                </View>
             </TouchableOpacity>
         )
     }
 
     return (
-        <View
-            style={{
-                padding: 10
-            }}>
-            <FlatList
-                data={allPokemons}
-                keyExtractor={allPokemons => allPokemons.name}
-                renderItem={PokemonShow}
-            />
+        <ImageBackground
+            source={{ uri: "https://static.wikia.nocookie.net/pokemongo/images/d/d1/Pokedex_Background.png/revision/latest/scale-to-width-down/250?cb=20160720022003" }}
+            resizeMode="cover"
+            style={styles.imageBackground} >
+            <View style={styles.container}>
+                <FlatList
+                    data={allPokemons}
+                    keyExtractor={allPokemons => allPokemons.url}
+                    renderItem={PokemonShow}
+                    onEndReached={loadApi}
+                    onEndReachedThreshold={0.2}
+                    ListFooterComponent={<Footerlist load={loading} />}
+                />
+            </View>
             <StatusBar />
-        </View>
+        </ImageBackground>
     )
 }

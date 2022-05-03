@@ -2,7 +2,7 @@ import api from "../api";
 
 export async function buscaPokemon() {
     try {
-        const resultado = await api.get(`/pokemon/?offset=0&limit=20`);//requisicao
+        const resultado = await api.get(`/pokemon/?offset=0&limit=10`);//requisicao
         const resultadoMap = resultado.data.results.map(allPokemons => {//tirar do array
             return allPokemons
         })
@@ -22,18 +22,20 @@ export async function buscaInfoPokemon(idPokemon) {
 
         //DETALHES DO POKEMON
         const name = pokemonDetails.data.name.toUpperCase()
+        const height = pokemonDetails.data.height
+        const weight = pokemonDetails.data.weight
         const type = pokemonDetails.data.types.map(typeName => {
             return typeName.type.name.toUpperCase()
         })
         const abilities = pokemonDetails.data.abilities.map(abilityName => {
             return abilityName.ability.name.toUpperCase()
         })
-        const pokemonDescription = species.data.flavor_text_entries.map(description => {
+        const description = species.data.flavor_text_entries.map(description => {
             if (description.language.name == 'en' && description.version.name == 'x') {
                 return description.flavor_text
             }
         })
-        // console.log("Descriçõ: ", pokemonDescription)
+        // console.log("Descriçõ: ", description)
 
         //TRATATIVA EVOLUÇÕES
         const evolutions = evolutionApi.data.chain
@@ -62,7 +64,15 @@ export async function buscaInfoPokemon(idPokemon) {
         }
 
         console.log("API OK!")
-        return { name, type, abilities, pokemonDescription, evolutionsFormImage }
+        return {
+            name,
+            height,
+            weight,
+            type,
+            abilities,
+            description,
+            evolutionsFormImage
+        }
     }
     catch (error) {
         console.log(error)
