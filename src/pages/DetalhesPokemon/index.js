@@ -41,12 +41,7 @@ export default function DetalhesPokemon({ route }) {
             <LinearGradient
                 style={styles.backgroundLinear}
                 colors={[backgroundType1(typePokemon), backgroundType2(typePokemon)]} />
-            <View style={{
-                flex: 1,
-                padding: 20,
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <View style={styles.cardContainer}>
 
                 <Image
                     style={styles.imgPokemon}
@@ -59,8 +54,8 @@ export default function DetalhesPokemon({ route }) {
                 </View>
 
                 <View style={styles.characteristicsContainer}>
-                    <Text style={styles.characteristics}>Weight: {weight} </Text>
-                    <Text style={styles.characteristics}>Height: {height} </Text>
+                    <Text style={styles.characteristics}>Weight: {weight / 10} kg</Text>
+                    <Text style={styles.characteristics}>Height: {height / 10} m</Text>
                     <View style={styles.typeContainer}>
                         <Text style={styles.type} >Type: {typePokemon[0]}</Text>
                         {
@@ -72,11 +67,7 @@ export default function DetalhesPokemon({ route }) {
                 </View>
                 <View style={styles.abilitiesContainer}>
                     <Text style={styles.abilities} >Abilities: {abilities[0]}</Text>
-                    {
-                        abilities[1]
-                            ? <Text style={styles.abilities}> / {abilities[1]}</Text>
-                            : <></>
-                    }
+                    <Text style={styles.abilities}> / {abilities[1]}</Text>
                 </View>
 
                 <Text style={styles.pokemonDescription}>{description}</Text>

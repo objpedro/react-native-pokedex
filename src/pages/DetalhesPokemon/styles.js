@@ -6,6 +6,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
     },
+    cardContainer: {
+        flex: 1,
+        width: '100%',
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     backgroundLinear: {
         position: 'absolute',
         width: '100%',
@@ -56,6 +63,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     pokemonDescription: {
+        marginTop: 5,
         fontSize: 20,
         textAlign: 'left'
     },
